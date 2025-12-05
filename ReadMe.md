@@ -25,3 +25,5 @@ errors.
 ● To create a centralized system that promotes convenience, transparency, and efficient
 transportation flow in Polangui.
 
+## WHAT IS THIS ALL ABOUT ##
+
