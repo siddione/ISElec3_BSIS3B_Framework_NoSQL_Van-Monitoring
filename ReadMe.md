@@ -30,3 +30,10 @@ transportation flow in Polangui.
 - Created app.js
 - Added root GET route
 - Tested server at http://localhost:3000
+
+# Step 2: Implement MVC Structure
+- Created /controllers, /routes, /models, /views folders
+- Added homeController.js
+- Added homeRoutes.js
+- Connected route in app.js
+- Tested home route at http://localhost:3000
