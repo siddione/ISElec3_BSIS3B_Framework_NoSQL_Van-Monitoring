@@ -11,12 +11,24 @@ export default function Home() {
         <p className="text-gray-700 mb-8 text-lg">
           Easily check van availability and reserve your seat in real-time.
         </p>
-        <Link
-          to="/reservations"  // links to your Reservations page
-          className="bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-6 rounded-xl shadow-lg transition duration-300 inline-block"
-        >
-          Reserve Seat Now
-        </Link>
+
+        <div className="space-x-4">
+          {/* Reserve Seat → goes to Reservation Form */}
+          <Link
+            to="/reservation-form"
+            className="bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-6 rounded-xl shadow-lg transition duration-300 inline-block"
+          >
+            Reserve Seat Now
+          </Link>
+
+          {/* View Reserved Seats → goes to /reservations */}
+          <Link
+            to="/reservations"
+            className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-6 rounded-xl shadow-lg transition duration-300 inline-block"
+          >
+            View Reserved Seats
+          </Link>
+        </div>
       </div>
     </div>
   );

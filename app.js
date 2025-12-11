@@ -1,13 +1,17 @@
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors'); // <-- import cors
 const app = express();
 
-// Models (still import if needed elsewhere)
+// Models
 const Van = require('./models/van');
 const Reservation = require('./models/Reservation');
 
 app.use(express.json());
+
+// Enable CORS
+app.use(cors()); // <-- add this line BEFORE your routes
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI)
