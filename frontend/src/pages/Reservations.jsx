@@ -22,7 +22,7 @@ const Reservations = () => {
       body: JSON.stringify({ vanId: selectedVan, passengerName: name }),
     })
       .then((res) => res.json())
-      .then((data) => {
+      .then(() => {
         setSuccess(`Seat reserved successfully for ${name} on Van ${selectedVan}`);
         setName("");
         setSelectedVan(null);
@@ -31,48 +31,60 @@ const Reservations = () => {
   };
 
   return (
-    <div className="p-8">
-      <h2 className="text-3xl font-bold mb-6 text-gray-800">Reserve a Seat</h2>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-6">
+      <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-lg w-full">
+        <h2 className="text-3xl font-extrabold text-gray-800 mb-6 text-center">
+          Reserve a Seat
+        </h2>
 
-      {vans.length === 0 ? (
-        <p>No vans available for reservation</p>
-      ) : (
-        <div className="space-y-4 max-w-md">
-          <label className="block font-semibold">Your Name:</label>
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="w-full p-2 border rounded"
-            placeholder="Enter your name"
-          />
+        {vans.length === 0 ? (
+          <p className="text-center text-gray-500">No vans available for reservation</p>
+        ) : (
+          <div className="space-y-5">
+            <div>
+              <label className="block font-semibold mb-1">Your Name:</label>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-400 outline-none transition"
+                placeholder="Enter your name"
+              />
+            </div>
 
-          <label className="block font-semibold">Select Van:</label>
-          <select
-            value={selectedVan || ""}
-            onChange={(e) => setSelectedVan(e.target.value)}
-            className="w-full p-2 border rounded"
-          >
-            <option value="" disabled>
-              -- Choose a van --
-            </option>
-            {vans.map((van) => (
-              <option key={van.id} value={van.id}>
-                Van {van.id} ({van.route}) - {van.availableSeats} seats
-              </option>
-            ))}
-          </select>
+            <div>
+              <label className="block font-semibold mb-1">Select Van:</label>
+              <select
+                value={selectedVan || ""}
+                onChange={(e) => setSelectedVan(e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-400 outline-none transition"
+              >
+                <option value="" disabled>
+                  -- Choose a van --
+                </option>
+                {vans.map((van) => (
+                  <option key={van.id} value={van.id}>
+                    Van {van.id} ({van.route}) - {van.availableSeats} seats
+                  </option>
+                ))}
+              </select>
+            </div>
 
-          <button
-            onClick={handleReservation}
-            className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
-          >
-            Reserve
-          </button>
+            <button
+              onClick={handleReservation}
+              className="w-full bg-green-600 text-white font-semibold py-3 rounded-xl hover:bg-green-700 shadow-lg transition duration-300"
+            >
+              Reserve
+            </button>
 
-          {success && <p className="text-green-700 font-semibold mt-4">{success}</p>}
-        </div>
-      )}
+            {success && (
+              <p className="text-green-700 font-semibold text-center mt-4 animate-fade-in">
+                {success}
+              </p>
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 };

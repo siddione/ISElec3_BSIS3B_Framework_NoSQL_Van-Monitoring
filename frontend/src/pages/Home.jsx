@@ -1,12 +1,19 @@
 import React from "react";
 
-const Home = () => {
+export default function Home() {
   return (
-    <div className="p-8">
-      <h2 className="text-2xl font-bold mb-4">Welcome to UV Express Monitoring</h2>
-      <p>Check van availability and reserve your seat online!</p>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-green-400 to-blue-500 p-6">
+      <div className="bg-white bg-opacity-90 rounded-2xl shadow-2xl p-10 max-w-xl text-center">
+        <h2 className="text-3xl md:text-4xl font-extrabold mb-6 text-gray-800">
+          Welcome to UV Express Polangui-Legazpi
+        </h2>
+        <p className="text-gray-700 mb-8 text-lg">
+          Easily check van availability and reserve your seat in real-time.
+        </p>
+        <button className="bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-6 rounded-xl shadow-lg transition duration-300">
+          View Vans & Reserve Now
+        </button>
+      </div>
     </div>
   );
-};
-
-export default Home;
+}
