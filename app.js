@@ -14,9 +14,16 @@ app.use(express.json());
 app.use(cors()); // <-- add this line BEFORE your routes
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI)
+mongoose.connect(process.env.MONGO_URI, {
+  serverSelectionTimeoutMS: 5000,
+  socketTimeoutMS: 45000,
+})
   .then(() => console.log("MongoDB connected successfully!"))
-  .catch((err) => console.log("MongoDB connection error:", err));
+  .catch((err) => {
+    console.log("MongoDB connection error:", err.message);
+    console.log("Full error:", err);
+    process.exit(1);
+  });
 
 // Use modular routes
 const vanRoutes = require('./routes/vanRoutes');
@@ -26,7 +33,7 @@ app.use('/reservations', reservationRoutes);
 
 // Example test route
 app.get('/', (req, res) => {
-  res.send('Hello from backend!');
+  res.send('Welcome to UV Express Van Monitoring!');
 });
 
 // Start server

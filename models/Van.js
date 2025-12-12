@@ -11,6 +11,6 @@ const vanSchema = new mongoose.Schema({
     enum: ['Arrived', 'Waiting', 'Traveling', 'Parked'], 
     default: 'Waiting' 
   }
-});
+}, { collection: 'vans' }); // collection name in DB
 
-module.exports = mongoose.model('Van', vanSchema);
+module.exports = mongoose.model('Van', vanSchema); // model name must match ref in Reservation
