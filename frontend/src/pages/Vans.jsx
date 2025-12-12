@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Vans() {
   const [vans, setVans] = useState([]);
@@ -6,6 +7,7 @@ export default function Vans() {
   const [error, setError] = useState("");
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
+  const navigate = useNavigate();
 
   const fetchVans = async () => {
     try {
@@ -85,50 +87,60 @@ export default function Vans() {
         {filteredVans.length === 0 ? (
           <p className="text-center text-white col-span-full">No vans found.</p>
         ) : (
-          filteredVans.map((van) => (
-            <div
-              key={van._id}
-              className="bg-white/20 shadow-lg rounded-2xl p-6 border border-white/30 hover:scale-105 transform transition duration-300"
-            >
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-2xl font-bold text-white">{van.route}</h2>
-                <span
-                  className={`px-3 py-1 rounded-full text-sm font-semibold 
+          filteredVans.map((van) => {
+            const canReserve = van.availableSeats > 0 && van.status === "Waiting";
+
+            return (
+              <div
+                key={van._id}
+                className="bg-white/20 shadow-lg rounded-2xl p-6 border border-white/30 hover:scale-105 transform transition duration-300"
+              >
+                <div className="flex justify-between items-center mb-4">
+                  <h2 className="text-2xl font-bold text-white">{van.route}</h2>
+                  <span
+                    className={`px-3 py-1 rounded-full text-sm font-semibold 
+                      ${
+                        van.status === "Waiting"
+                          ? "bg-yellow-400 text-black"
+                          : van.status === "Traveling"
+                          ? "bg-blue-400 text-black"
+                          : van.status === "Arrived"
+                          ? "bg-green-400 text-black"
+                          : "bg-gray-400 text-black"
+                      }`}
+                  >
+                    {van.status}
+                  </span>
+                </div>
+
+                <div className="text-white space-y-2 mb-4">
+                  <p>
+                    <span className="font-semibold">Driver:</span> {van.driverName}
+                  </p>
+                  <p>
+                    <span className="font-semibold">Plate:</span> {van.plateNumber}
+                  </p>
+                  <p>
+                    <span className="font-semibold">Seats:</span>{" "}
+                    {van.availableSeats}/{van.totalSeats} available
+                  </p>
+                </div>
+
+                <button
+                  onClick={() => canReserve && navigate(`/reservation-form?vanId=${van._id}`)}
+                  disabled={!canReserve}
+                  className={`w-full text-center font-semibold py-2 rounded-xl shadow-md transition duration-300
                     ${
-                      van.status === "Waiting"
-                        ? "bg-yellow-400 text-black"
-                        : van.status === "Traveling"
-                        ? "bg-blue-400 text-black"
-                        : van.status === "Arrived"
-                        ? "bg-green-400 text-black"
-                        : "bg-gray-400 text-black"
+                      canReserve
+                        ? "bg-green-500 hover:bg-green-600 text-white cursor-pointer"
+                        : "bg-gray-400 text-gray-200 cursor-not-allowed"
                     }`}
                 >
-                  {van.status}
-                </span>
+                  {canReserve ? "Reserve Seat" : "Unavailable"}
+                </button>
               </div>
-
-              <div className="text-white space-y-2 mb-4">
-                <p>
-                  <span className="font-semibold">Driver:</span> {van.driverName}
-                </p>
-                <p>
-                  <span className="font-semibold">Plate:</span> {van.plateNumber}
-                </p>
-                <p>
-                  <span className="font-semibold">Seats:</span>{" "}
-                  {van.availableSeats}/{van.totalSeats} available
-                </p>
-              </div>
-
-              <a
-                href="/reservation-form"
-                className="block w-full text-center bg-green-500 hover:bg-green-600 text-white font-semibold py-2 rounded-xl shadow-md transition duration-300"
-              >
-                Reserve Seat
-              </a>
-            </div>
-          ))
+            );
+          })
         )}
       </div>
     </div>

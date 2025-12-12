@@ -8,6 +8,7 @@ const app = express();
 const Van = require('./models/Van');
 const Reservation = require('./models/Reservation');
 
+
 app.use(express.json());
 
 // Enable CORS
@@ -28,8 +29,10 @@ mongoose.connect(process.env.MONGO_URI, {
 // Use modular routes
 const vanRoutes = require('./routes/vanRoutes');
 const reservationRoutes = require('./routes/reservationRoutes');
+const driverRoutes = require("./routes/driverRoutes");
 app.use('/vans', vanRoutes);
 app.use('/reservations', reservationRoutes);
+app.use("/drivers", driverRoutes);
 
 // Example test route
 app.get('/', (req, res) => {

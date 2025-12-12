@@ -1,79 +1,45 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
-export default function DriverPanel() {
-  const [vans, setVans] = useState([]);
-  const [loading, setLoading] = useState(true);
+export default function DriverPanel({ driver, token }) {
+  const [status, setStatus] = useState(driver.van?.status || "");
 
-  const fetchVans = async () => {
+  const handleUpdate = async () => {
     try {
-      const res = await fetch("http://localhost:3000/vans");
-      const data = await res.json();
-      setVans(data);
-      setLoading(false);
-    } catch (err) {
-      console.error(err);
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchVans();
-  }, []);
-
-  const updateStatus = async (vanId, newStatus) => {
-    try {
-      const res = await fetch(`http://localhost:3000/vans/${vanId}/status`, {
+      const res = await fetch(`http://localhost:3000/drivers/${driver._id}/van-status`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status: newStatus }),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ status }),
       });
-
-      if (!res.ok) {
-        const data = await res.json();
-        alert(data.error || "Failed to update status");
-        return;
-      }
-
-      fetchVans(); // refresh list
-    } catch (err) {
-      console.error(err);
-    }
+      const data = await res.json();
+      if (!res.ok) alert(data.error || "Failed");
+      else alert("Van status updated!");
+    } catch (err) { console.error(err); }
   };
-
-  if (loading) return <p className="p-6 text-center text-green-700">Loading vans...</p>;
 
   return (
-    <div className="min-h-screen bg-green-50 p-8">
-      <h1 className="text-3xl font-extrabold text-green-900 mb-6 text-center">Driver Panel</h1>
-
-      {vans.length === 0 ? (
-        <p className="text-center text-green-700">No vans available</p>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {vans.map((van) => (
-            <div key={van._id} className="p-6 bg-white rounded-xl shadow-md border border-gray-200">
-              <p><strong>Route:</strong > {van.route}</p>
-              <p><strong>Driver:</strong> {van.driverName}</p>
-              <p><strong>Status:</strong> {van.status}</p>
-              <p><strong>Seats:</strong> {van.availableSeats}/{van.totalSeats}</p>
-
-              <div className="mt-4 flex gap-2">
-                {["Waiting", "Traveling", "Arrived", "Parked"].map((statusOption) => (
-                  <button
-                    key={statusOption}
-                    onClick={() => updateStatus(van._id, statusOption)}
-                    className={`px-3 py-1 rounded text-white ${
-                      van.status === statusOption ? "bg-green-700" : "bg-green-500 hover:bg-green-600"
-                    } transition`}
-                  >
-                    {statusOption}
-                  </button>
-                ))}
-              </div>
-            </div>
-          ))}
+    <div className="min-h-screen flex items-center justify-center bg-green-50 p-6">
+      <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md">
+        <h1 className="text-2xl font-bold text-green-900 mb-6 text-center">Driver Panel</h1>
+        <div>
+          <label className="block mb-2">Van Status</label>
+          <select
+            value={status}
+            onChange={(e) => setStatus(e.target.value)}
+            className="w-full p-2 border border-green-300 rounded"
+          >
+            <option value="Waiting">Waiting</option>
+            <option value="Traveling">Traveling</option>
+            <option value="Arrived">Arrived</option>
+            <option value="Parked">Parked</option>
+          </select>
         </div>
-      )}
+        <button onClick={handleUpdate} className="w-full bg-green-600 text-white py-2 mt-4 rounded">
+          Update Status
+        </button>
+      </div>
     </div>
   );
 }
