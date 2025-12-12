@@ -3,25 +3,28 @@ import React, { useEffect, useState } from "react";
 export default function Vans() {
   const [vans, setVans] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
 
-  // Fetch vans
   const fetchVans = async () => {
     try {
       const res = await fetch("http://localhost:3000/vans");
+      if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
       const data = await res.json();
       setVans(data);
       setLoading(false);
+      setError("");
     } catch (err) {
       console.error("Error fetching vans:", err);
+      setError("Failed to load vans. Make sure your backend is running!");
       setLoading(false);
     }
   };
 
   useEffect(() => {
     fetchVans();
-    const interval = setInterval(fetchVans, 5000); // live refresh
+    const interval = setInterval(fetchVans, 5000); // live refresh every 5 sec
     return () => clearInterval(interval);
   }, []);
 
@@ -39,6 +42,13 @@ export default function Vans() {
     return (
       <div className="p-8 text-center text-white text-xl font-semibold">
         Loading vans...
+      </div>
+    );
+
+  if (error)
+    return (
+      <div className="p-8 text-center text-red-500 text-xl font-semibold">
+        {error}
       </div>
     );
 
@@ -106,7 +116,8 @@ export default function Vans() {
                   <span className="font-semibold">Plate:</span> {van.plateNumber}
                 </p>
                 <p>
-                  <span className="font-semibold">Seats:</span> {van.availableSeats}/{van.totalSeats} available
+                  <span className="font-semibold">Seats:</span>{" "}
+                  {van.availableSeats}/{van.totalSeats} available
                 </p>
               </div>
 

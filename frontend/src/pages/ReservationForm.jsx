@@ -1,18 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import { VanContext } from "../context/vanContext";
 
 export default function ReservationForm() {
-  const [vans, setVans] = useState([]);
+  const { vans, fetchVans } = useContext(VanContext);
   const [passengerName, setPassengerName] = useState("");
   const [vanId, setVanId] = useState("");
   const [success, setSuccess] = useState("");
-
-  // Fetch vans from backend
-  useEffect(() => {
-    fetch("http://localhost:3000/vans")
-      .then((res) => res.json())
-      .then((data) => setVans(data))
-      .catch((err) => console.error(err));
-  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -26,11 +19,7 @@ export default function ReservationForm() {
       const res = await fetch("http://localhost:3000/reservations", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            passengerName,
-            vanId,
-        }),
-
+        body: JSON.stringify({ passengerName, vanId }),
       });
 
       const data = await res.json();
@@ -43,6 +32,9 @@ export default function ReservationForm() {
       setSuccess(`Reservation successful for ${passengerName}`);
       setPassengerName("");
       setVanId("");
+
+      // Refresh vans to update available seats immediately
+      fetchVans();
 
       setTimeout(() => setSuccess(""), 5000);
     } catch (err) {

@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const Van = require('../models/Van');
+const Reservation = require("../models/Reservation");
 
 // GET /vans → return all vans
 router.get('/', async (req, res) => {
@@ -27,6 +28,18 @@ router.get('/:id/status', async (req, res) => {
     res.status(200).json({ status: van.status });
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+});
+
+// GET all reservations with van details
+router.get("/", async (req, res) => {
+  try {
+    const reservations = await Reservation.find().populate("van"); 
+    // 'van' here must match the field name in your Reservation schema
+    res.json(reservations);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to fetch reservations" });
   }
 });
 

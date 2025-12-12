@@ -17,7 +17,12 @@ const ReservationsLists = () => {
       });
   }, []);
 
-  if (loading) return <p className="p-6 text-center text-green-700">Loading reservations...</p>;
+  if (loading)
+    return (
+      <p className="p-6 text-center text-green-700 font-semibold">
+        Loading reservations...
+      </p>
+    );
 
   return (
     <div className="min-h-screen bg-green-50 p-8 flex justify-center">
@@ -41,13 +46,31 @@ const ReservationsLists = () => {
                 </tr>
               </thead>
               <tbody>
-                {reservations.map(resv => (
+                {reservations.map((resv) => (
                   <tr key={resv._id} className="text-black text-center">
                     <td className="p-3 border">{resv.passengerName}</td>
                     <td className="p-3 border">{resv.van?.route || "N/A"}</td>
                     <td className="p-3 border">{resv.van?.driverName || "N/A"}</td>
                     <td className="p-3 border">{resv.seatNumber}</td>
-                    <td className="p-3 border">{resv.van?.status || "N/A"}</td>
+                    <td className="p-3 border">
+                      {resv.van?.status ? (
+                        <span
+                          className={`px-3 py-1 rounded-full text-sm font-semibold ${
+                            resv.van.status === "Waiting"
+                              ? "bg-yellow-400 text-black"
+                              : resv.van.status === "Traveling"
+                              ? "bg-blue-400 text-black"
+                              : resv.van.status === "Arrived"
+                              ? "bg-green-400 text-black"
+                              : "bg-gray-400 text-black"
+                          }`}
+                        >
+                          {resv.van.status}
+                        </span>
+                      ) : (
+                        "N/A"
+                      )}
+                    </td>
                   </tr>
                 ))}
               </tbody>
