@@ -25,7 +25,7 @@ mongoose
 // ================= ROUTES =================
 app.use("/vans", require("./routes/vanRoutes"));
 app.use("/reservations", require("./routes/reservationRoutes"));
-app.use("/drivers", require("./routes/driverRoutes"));
+app.use("/drivers", require("./routes/driverRoutes"));  
 
 // ================= TEST ROUTE =================
 app.get("/", (req, res) => {

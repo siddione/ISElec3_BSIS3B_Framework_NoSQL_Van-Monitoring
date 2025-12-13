@@ -16,7 +16,7 @@ export default function Navbar() {
     <nav className="bg-white shadow-md py-4 px-6 flex justify-between items-center">
       <div className="text-xl font-bold text-green-700">Welcome to UV Express Van Monitoring!</div>
       <div className="flex space-x-2">
-        <Link to="/available-vans" className={navItemClass("/available-vans")}>
+        <Link to="/Vans" className={navItemClass("/Vans")}>
           Available Vans
         </Link>
         <Link to="/reservations" className={navItemClass("/reservations")}>

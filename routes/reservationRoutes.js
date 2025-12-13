@@ -4,33 +4,48 @@ const mongoose = require('mongoose');
 const Reservation = require('../models/Reservation');
 const Van = require('../models/Van');
 
-// POST /reservations → create reservation and reduce available seats
 router.post('/', async (req, res) => {
   const { vanId, passengerName } = req.body;
+  
+  if (!vanId || !passengerName) {
+    return res.status(400).json({ error: "vanId and passengerName are required" });
+  }
 
-  if (!vanId || !passengerName) return res.status(400).json({ error: "vanId and passengerName are required" });
-  if (!mongoose.Types.ObjectId.isValid(vanId)) return res.status(400).json({ error: "Invalid van ID" });
+  if (!mongoose.Types.ObjectId.isValid(vanId)) {
+    return res.status(400).json({ error: "Invalid van ID" });
+  }
 
   try {
     const van = await Van.findById(vanId);
     if (!van) return res.status(404).json({ error: "Van not found" });
-    if (van.availableSeats <= 0) return res.status(400).json({ error: "No available seats" });
+    if (van.availableSeats <= 0) {
+      return res.status(400).json({ error: "No available seats" });
+    }
+
+    // ✅ FIXED seatNumber LOGIC
+    const seatNumber = 13 - van.availableSeats; // 12 seats default
 
     const reservation = new Reservation({
       van: vanId,
       passengerName,
-      seatNumber: van.totalSeats - van.availableSeats + 1,
+      seatNumber
     });
 
     await reservation.save();
+
     van.availableSeats -= 1;
     await van.save();
 
-    res.status(201).json({ message: "Reservation created", reservation });
+    res.status(201).json({
+      message: "Reservation created",
+      reservation
+    });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
   }
 });
+
 
 // GET /reservations → list all reservations with van details
 router.get('/', async (req, res) => {

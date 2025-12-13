@@ -44,7 +44,7 @@ export default function DriverRegister() {
     <div className="min-h-screen flex items-center justify-center bg-gray-100 p-6">
       <form
         onSubmit={handleSubmit}
-        className="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full"
+        className="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full text-black"
       >
         <h2 className="text-2xl font-bold mb-6 text-gray-800">Driver Registration</h2>
 
@@ -59,14 +59,14 @@ export default function DriverRegister() {
           { label: "Van Plate Number", name: "plateNumber", type: "text" },
         ].map((field) => (
           <div className="mb-4" key={field.name}>
-            <label className="block mb-1 font-semibold">{field.label}</label>
+            <label className="block mb-1 font-semibold ">{field.label}</label>
             <input
               type={field.type}
               name={field.name}
               value={form[field.name]}
               onChange={handleChange}
               required
-              className="w-full border rounded px-3 py-2"
+              className="w-full border rounded px-3 py-2 text-black"
             />
           </div>
         ))}

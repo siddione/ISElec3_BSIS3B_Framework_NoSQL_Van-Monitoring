@@ -4,13 +4,16 @@ import axios from "axios";
 export default function DriverPanel() {
   const [driver, setDriver] = useState(null);
   const [status, setStatus] = useState("");
-  const [profilePic, setProfilePic] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
 
-  // Fetch driver details on mount
+  const token = localStorage.getItem("driverToken");
+
   useEffect(() => {
-    const token = localStorage.getItem("driverToken");
-    if (!token) return;
+    if (!token) {
+      setLoading(false);
+      return;
+    }
 
     axios
       .get("http://localhost:3000/drivers/me", {
@@ -19,106 +22,121 @@ export default function DriverPanel() {
       .then((res) => {
         setDriver(res.data);
         setStatus(res.data.van?.status || "Waiting");
+        setLoading(false);
       })
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        console.error(err);
+        setLoading(false);
+      });
   }, []);
 
-  const handleStatusChange = (e) => {
-    setStatus(e.target.value);
-  };
-
-  const updateVanStatus = () => {
-    const token = localStorage.getItem("driverToken");
-    axios
-      .put(
+  const updateStatus = async () => {
+    try {
+      const res = await axios.put(
         `http://localhost:3000/drivers/${driver._id}/van-status`,
         { status },
-        { headers: { Authorization: `Bearer ${token}` } }
-      )
-      .then((res) => setMessage(res.data.message))
-      .catch((err) => console.error(err));
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      setMessage("Van status updated successfully");
+      setDriver({ ...driver, van: res.data.van });
+    } catch (err) {
+      console.error(err);
+      alert("Failed to update status");
+    }
   };
 
-  const handleProfilePicChange = (e) => {
-    setProfilePic(e.target.files[0]);
+  // 🔴 DELETE FEATURE
+  const deleteDriver = async () => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete your driver account?"
+    );
+
+    if (!confirmDelete) return;
+
+    try {
+      await axios.delete("http://localhost:3000/drivers/me", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      localStorage.removeItem("driverToken");
+      alert("Driver account deleted successfully");
+      window.location.href = "/driver-login";
+    } catch (err) {
+      console.error(err);
+      alert("Failed to delete driver account");
+    }
   };
 
-  const updateProfilePic = () => {
-    if (!profilePic) return;
-    const token = localStorage.getItem("driverToken");
-    const formData = new FormData();
-    formData.append("profilePic", profilePic);
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-xl font-semibold">Loading...</p>
+      </div>
+    );
+  }
 
-    axios
-      .put(`http://localhost:3000/drivers/${driver._id}/profile-pic`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((res) => {
-        setDriver((prev) => ({ ...prev, profilePic: res.data.driver.profilePic }));
-        setMessage("Profile picture updated successfully!");
-      })
-      .catch((err) => console.error(err));
-  };
-
-  if (!driver) return <p>Loading...</p>;
+  if (!driver) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-red-600 font-semibold">
+          Unable to load driver data
+        </p>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-start bg-gray-100 p-6">
-      <h2 className="text-3xl font-bold mb-6">Driver Panel</h2>
+    <div className="min-h-screen bg-green-50 p-8">
+      <h1 className="text-3xl font-bold text-green-900 mb-6">
+        Driver Dashboard
+      </h1>
 
-      {/* Driver Info */}
-      <div className="bg-white p-6 rounded-xl shadow-md w-full max-w-md mb-6">
-        <img
-          src={driver.profilePic || "https://via.placeholder.com/150"}
-          alt="Profile"
-          className="w-32 h-32 rounded-full mx-auto mb-4"
-        />
-        <p><strong>Name:</strong> {driver.name}</p>
-        <p><strong>Email:</strong> {driver.email}</p>
-        <p><strong>License ID:</strong> {driver.licenseId}</p>
-        <p><strong>Address:</strong> {driver.address}</p>
-        <p><strong>Age:</strong> {driver.age}</p>
-        <p><strong>Birthday:</strong> {new Date(driver.birthday).toLocaleDateString()}</p>
-        <p><strong>Van Plate Number:</strong> {driver.van?.plateNumber}</p>
-      </div>
+      <div className="bg-white rounded-2xl shadow-lg p-6 max-w-lg">
+        <p className="mb-2"><strong>Name:</strong> {driver.name}</p>
+        <p className="mb-2"><strong>Email:</strong> {driver.email}</p>
+        <p className="mb-4">
+          <strong>Plate Number:</strong> {driver.van?.plateNumber}
+        </p>
 
-      {/* Update Van Status */}
-      <div className="bg-white p-6 rounded-xl shadow-md w-full max-w-md mb-6">
-        <h3 className="font-semibold mb-2">Update Van Status</h3>
+        <label className="block font-semibold mb-2 text-green-900">
+          Van Status
+        </label>
+
         <select
           value={status}
-          onChange={handleStatusChange}
-          className="border p-2 rounded w-full mb-4"
+          onChange={(e) => setStatus(e.target.value)}
+          className="w-full border rounded-xl p-3 mb-4"
         >
           <option value="Waiting">Waiting</option>
           <option value="Traveling">Traveling</option>
           <option value="Arrived">Arrived</option>
           <option value="Parked">Parked</option>
         </select>
+
         <button
-          onClick={updateVanStatus}
-          className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded w-full"
+          onClick={updateStatus}
+          className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-xl mb-4"
         >
           Update Status
         </button>
-      </div>
 
-      {/* Update Profile Picture */}
-      <div className="bg-white p-6 rounded-xl shadow-md w-full max-w-md mb-6">
-        <h3 className="font-semibold mb-2">Change Profile Picture</h3>
-        <input type="file" onChange={handleProfilePicChange} className="mb-4" />
+        {/* 🔴 DELETE BUTTON */}
         <button
-          onClick={updateProfilePic}
-          className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded w-full"
+          onClick={deleteDriver}
+          className="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-3 rounded-xl"
         >
-          Update Picture
+          Delete Driver Account
         </button>
-      </div>
 
-      {message && <p className="text-green-600 font-semibold">{message}</p>}
+        {message && (
+          <p className="text-green-700 text-center mt-4 font-semibold">
+            {message}
+          </p>
+        )}
+      </div>
     </div>
   );
 }

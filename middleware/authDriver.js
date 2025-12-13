@@ -22,7 +22,12 @@ const authDriver = async (req, res, next) => {
       return res.status(401).json({ error: "Invalid token. Driver not found." });
     }
 
-    req.driver = driver; // attach driver info to request
+    // ✅ FIX: expose ID safely
+    req.driver = {
+      id: driver._id,
+      ...driver.toObject(),
+    };
+
     next();
   } catch (err) {
     console.error("Auth error:", err.message);
