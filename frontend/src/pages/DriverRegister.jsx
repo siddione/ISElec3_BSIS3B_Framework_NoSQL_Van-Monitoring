@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import API_URL from "../config";
 
 export default function DriverRegister() {
   const navigate = useNavigate();
@@ -22,11 +23,11 @@ export default function DriverRegister() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:3000/drivers/register", form);
+      const res = await axios.post(`${API_URL}/drivers/register`, form);
       alert(res.data.message);
 
       // Login immediately to get token
-      const loginRes = await axios.post("http://localhost:3000/drivers/login", {
+      const loginRes = await axios.post(`${API_URL}/drivers/login`, {
         email: form.email,
         password: form.password,
       });

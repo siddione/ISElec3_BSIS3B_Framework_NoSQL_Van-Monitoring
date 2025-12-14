@@ -9,7 +9,7 @@ export const VanProvider = ({ children }) => {
   // Fetch vans from backend
   const fetchVans = async () => {
     try {
-      const res = await fetch("http://localhost:3000/vans");
+      const res = await fetch(`${API_URL}/vans`);
       const data = await res.json();
       setVans(data);
       setLoading(false);

@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
+import API_URL from "../config";
 
 export default function Reservations() {
   const [reservations, setReservations] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:3000/reservations")
+    fetch(`${API_URL}/reservations`)
       .then((res) => res.json())
       .then((data) => {
         setReservations(data);

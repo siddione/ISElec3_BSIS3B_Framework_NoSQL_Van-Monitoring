@@ -18,7 +18,7 @@ const ReservationsList = () => {
         
         // If driver is logged in, fetch driver details first
         if (token) {
-          const driverRes = await axios.get("http://localhost:3000/drivers/me", {
+          const driverRes = await axios.get(`${API_URL}/drivers/me`, {
             headers: { Authorization: `Bearer ${token}` },
           });
           vanId = driverRes.data.van?._id;
@@ -28,7 +28,7 @@ const ReservationsList = () => {
         setDriverLoaded(true);
 
         // Now fetch reservations
-        const res = await fetch("http://localhost:3000/reservations");
+        const res = await fetch(`${API_URL}/reservations`);
         const data = await res.json();
         
         // Filter reservations by driver's van if logged in

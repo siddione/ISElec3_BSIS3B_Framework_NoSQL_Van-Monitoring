@@ -35,7 +35,7 @@ export default function ReservationForm() {
     }
 
     try {
-      const res = await fetch("http://localhost:3000/reservations", {
+      const res = await fetch(`${API_URL}/reservations`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ passengerName, vanId: selectedVan._id, quantity }),

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import API_URL from "../config";
 
 export default function DriverLogin() {
   const navigate = useNavigate();
@@ -18,7 +19,7 @@ export default function DriverLogin() {
 
     try {
       const res = await axios.post(
-        "http://localhost:3000/drivers/login",
+        `${API_URL}/drivers/login`,
         { email, password }
       );
 
