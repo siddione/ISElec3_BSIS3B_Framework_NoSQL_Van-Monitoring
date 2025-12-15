@@ -21,28 +21,32 @@ export default function DriverRegister() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await axios.post(`${API_URL}/drivers/register`, form);
-      alert(res.data.message);
+  e.preventDefault();
+  try {
+    const res = await axios.post(
+      "http://localhost:3000/drivers/register",
+      form
+    );
 
-<<<<<<< HEAD
-      const loginRes = await axios.post("http://localhost:3000/drivers/login", {
-=======
-      // Login immediately to get token
-      const loginRes = await axios.post(`${API_URL}/drivers/login`, {
->>>>>>> fbf7806a30184e321de93c4135c087b563dc5c7a
+    alert(res.data.message);
+
+    // Login immediately after registration
+    const loginRes = await axios.post(
+      "http://localhost:3000/drivers/login",
+      {
         email: form.email,
         password: form.password,
-      });
+      }
+    );
 
-      localStorage.setItem("driverToken", loginRes.data.token);
-      navigate("/driver-panel");
-    } catch (err) {
-      console.error(err);
-      alert(err.response?.data?.error || "Registration failed");
-    }
-  };
+    localStorage.setItem("driverToken", loginRes.data.token);
+    navigate("/driver-panel");
+  } catch (err) {
+    console.error(err);
+    alert(err.response?.data?.error || "Registration failed");
+  }
+};
+
 
   return (
     <div className="min-h-screen flex text-left justify-center bg-gradient-to-r from-green-100 to-green-50 p-6">

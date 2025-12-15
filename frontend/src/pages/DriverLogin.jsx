@@ -11,29 +11,22 @@ export default function DriverLogin() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
-    setLoading(true);
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+  try {
+    const res = await axios.post(
+      "http://localhost:3000/drivers/login",
+      { email, password }
+    );
 
-    try {
-<<<<<<< HEAD
-      const res = await axios.post("http://localhost:3000/drivers/login", { email, password });
-=======
-      const res = await axios.post(
-        `${API_URL}/drivers/login`,
-        { email, password }
-      );
+    localStorage.setItem("driverToken", res.data.token);
+    navigate("/driver-panel");
+  } catch (err) {
+    console.error(err);
+    alert(err.response?.data?.error || "Login failed");
+  }
+};
 
->>>>>>> fbf7806a30184e321de93c4135c087b563dc5c7a
-      localStorage.setItem("driverToken", res.data.token);
-      navigate("/driver-panel");
-    } catch (err) {
-      setError(err.response?.data?.error || "Invalid email or password");
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-green-100 to-green-50 p-6">
