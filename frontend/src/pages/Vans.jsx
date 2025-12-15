@@ -26,7 +26,7 @@ export default function Vans() {
 
   useEffect(() => {
     fetchVans();
-    const interval = setInterval(fetchVans, 5000); // live refresh every 5 sec
+    const interval = setInterval(fetchVans, 5000);
     return () => clearInterval(interval);
   }, []);
 
@@ -55,24 +55,24 @@ export default function Vans() {
     );
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-green-100 to-green-50 p-8">
-      <h1 className="text-4xl font-extrabold text-center text-green-900 mb-8">
+    <div className="min-h-screen bg-gradient-to-b from-green-100 to-green-50 p-8 md:p-12">
+      <h1 className="text-4xl md:text-5xl font-extrabold text-center text-green-900 mb-10">
         Available Vans
       </h1>
 
       {/* Search & Filter */}
-      <div className="flex flex-col md:flex-row justify-between mb-8 gap-4">
+      <div className="flex flex-col md:flex-row justify-between mb-10 gap-4">
         <input
           type="text"
           placeholder="Search by route, driver, or plate..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full md:w-2/3 p-3 rounded-xl border border-green-300 bg-white text-green-900 placeholder-green-400 focus:ring-2 focus:ring-green-400 outline-none transition"
+          className="w-full md:w-2/3 p-4 rounded-2xl border border-green-300 bg-white text-green-900 placeholder-green-400 focus:ring-4 focus:ring-green-300 outline-none transition shadow-sm"
         />
         <select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
-          className="w-full md:w-1/3 p-3 rounded-xl border border-green-300 bg-white text-green-900 focus:ring-2 focus:ring-green-400 outline-none transition"
+          className="w-full md:w-1/3 p-4 rounded-2xl border border-green-300 bg-white text-green-900 focus:ring-4 focus:ring-green-300 outline-none transition shadow-sm"
         >
           <option value="">All Statuses</option>
           <option value="Waiting">Waiting</option>
@@ -83,9 +83,11 @@ export default function Vans() {
       </div>
 
       {/* Vans Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {filteredVans.length === 0 ? (
-          <p className="text-center text-green-700 col-span-full">No vans found.</p>
+          <p className="text-center text-green-700 col-span-full text-lg">
+            No vans found.
+          </p>
         ) : (
           filteredVans.map((van) => {
             const canReserve = van.availableSeats > 0 && van.status === "Waiting";
@@ -93,12 +95,12 @@ export default function Vans() {
             return (
               <div
                 key={van._id}
-                className="bg-white rounded-2xl p-6 border border-green-200 shadow-md hover:shadow-xl transition transform hover:scale-105"
+                className="bg-white rounded-3xl p-6 border border-green-100 shadow-md hover:shadow-2xl transition transform hover:scale-105"
               >
                 <div className="flex justify-between items-center mb-4">
                   <h2 className="text-2xl font-bold text-green-900">{van.route}</h2>
                   <span
-                    className={`px-3 py-1 rounded-full text-sm font-semibold 
+                    className={`px-4 py-1 rounded-full text-sm font-semibold 
                       ${
                         van.status === "Waiting"
                           ? "bg-yellow-200 text-green-900"
@@ -113,7 +115,7 @@ export default function Vans() {
                   </span>
                 </div>
 
-                <div className="text-green-900 space-y-2 mb-4">
+                <div className="text-green-900 space-y-2 mb-6">
                   <p>
                     <span className="font-semibold">Driver:</span> {van.driverName}
                   </p>
@@ -128,7 +130,7 @@ export default function Vans() {
                 <button
                   onClick={() => canReserve && navigate(`/reservation-form?vanId=${van._id}`)}
                   disabled={!canReserve}
-                  className={`w-full text-center font-semibold py-2 rounded-xl shadow-md transition duration-300
+                  className={`w-full text-center font-semibold py-3 rounded-2xl shadow-md transition duration-300
                     ${canReserve
                       ? "bg-green-500 hover:bg-green-600 text-white cursor-pointer"
                       : "bg-gray-300 text-gray-500 cursor-not-allowed"

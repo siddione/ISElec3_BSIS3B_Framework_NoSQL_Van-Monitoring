@@ -4,7 +4,6 @@ import axios from "axios";
 
 export default function DriverLogin() {
   const navigate = useNavigate();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -17,11 +16,7 @@ export default function DriverLogin() {
     setLoading(true);
 
     try {
-      const res = await axios.post(
-        "http://localhost:3000/drivers/login",
-        { email, password }
-      );
-
+      const res = await axios.post("http://localhost:3000/drivers/login", { email, password });
       localStorage.setItem("driverToken", res.data.token);
       navigate("/driver-panel");
     } catch (err) {
@@ -32,53 +27,43 @@ export default function DriverLogin() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-100 to-green-200 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-green-100 to-green-50 p-6">
       <form
         onSubmit={handleSubmit}
-        className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full"
+        className="bg-white rounded-3xl shadow-2xl p-10 max-w-md w-full hover:shadow-3xl transition duration-300"
       >
         {/* Header */}
-        <div className="text-center mb-6">
-          <div className="mx-auto mb-3 w-12 h-12 flex items-center justify-center rounded-full bg-green-500 text-white text-xl font-bold">
+        <div className="text-center mb-8">
+          <div className="mx-auto mb-4 w-14 h-14 flex items-center justify-center rounded-full bg-green-500 text-white text-2xl font-bold">
             🚐
           </div>
-          <h2 className="text-2xl font-bold text-gray-800">
-            Driver Login
-          </h2>
-          <p className="text-sm text-gray-500">
-            Access your driver dashboard
-          </p>
+          <h2 className="text-3xl font-extrabold text-green-900 mb-1">Driver Login</h2>
+          <p className="text-sm text-green-700">Access your driver dashboard</p>
         </div>
 
         {/* Error Message */}
         {error && (
-          <div className="mb-4 rounded-lg bg-red-100 text-red-700 px-4 py-2 text-sm">
+          <div className="mb-4 rounded-xl bg-red-100 text-red-700 px-4 py-2 text-sm text-center">
             {error}
           </div>
         )}
 
         {/* Email */}
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Email Address
-          </label>
+        <div className="mb-5">
+          <label className="block text-sm font-semibold text-green-900 mb-2">Email Address</label>
           <input
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
             placeholder="driver@email.com"
-            className="w-full rounded-lg border border-gray-300 px-4 py-2 text-gray-800
-                       focus:outline-none focus:ring-2 focus:ring-green-500"
+            className="w-full p-3 rounded-2xl border border-green-300 text-black focus:ring-2 focus:ring-green-400 outline-none transition duration-300"
           />
         </div>
 
         {/* Password */}
         <div className="mb-6">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Password
-          </label>
-
+          <label className="block text-sm font-semibold text-green-900 mb-2">Password</label>
           <div className="relative">
             <input
               type={showPassword ? "text" : "password"}
@@ -86,36 +71,30 @@ export default function DriverLogin() {
               onChange={(e) => setPassword(e.target.value)}
               required
               placeholder="••••••••"
-              className="w-full rounded-lg border border-gray-300 px-4 py-2 pr-10 text-gray-800
-                         focus:outline-none focus:ring-2 focus:ring-green-500"
+              className="w-full p-3 pr-10 rounded-2xl border border-green-300 text-black focus:ring-2 focus:ring-green-400 outline-none transition duration-300"
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-2.5 text-gray-500 text-sm"
+              className="absolute right-3 top-3 text-green-600 font-semibold text-sm"
             >
               {showPassword ? "Hide" : "Show"}
             </button>
           </div>
         </div>
 
-        {/* Button */}
+        {/* Login Button */}
         <button
           type="submit"
           disabled={loading}
-          className={`w-full font-semibold py-2.5 rounded-xl transition duration-200
-            ${loading
-              ? "bg-green-400 cursor-not-allowed"
-              : "bg-green-600 hover:bg-green-700 active:scale-[0.98]"
-            } text-white`}
+          className={`w-full py-4 rounded-2xl font-semibold text-white shadow-lg transition transform hover:scale-105 duration-300
+            ${loading ? "bg-green-400 cursor-not-allowed" : "bg-green-600 hover:bg-green-700"}`}
         >
           {loading ? "Logging in..." : "Login"}
         </button>
 
         {/* Footer */}
-        <p className="text-center text-sm text-gray-500 mt-6">
-          Authorized drivers only
-        </p>
+        <p className="text-center text-sm text-green-700 mt-6">Authorized drivers only</p>
       </form>
     </div>
   );

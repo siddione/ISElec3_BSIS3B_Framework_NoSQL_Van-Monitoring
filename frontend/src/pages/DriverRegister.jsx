@@ -25,14 +25,12 @@ export default function DriverRegister() {
       const res = await axios.post("http://localhost:3000/drivers/register", form);
       alert(res.data.message);
 
-      // Login immediately to get token
       const loginRes = await axios.post("http://localhost:3000/drivers/login", {
         email: form.email,
         password: form.password,
       });
 
       localStorage.setItem("driverToken", loginRes.data.token);
-
       navigate("/driver-panel");
     } catch (err) {
       console.error(err);
@@ -41,12 +39,14 @@ export default function DriverRegister() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-6">
+    <div className="min-h-screen flex text-left justify-center bg-gradient-to-r from-green-100 to-green-50 p-6">
       <form
         onSubmit={handleSubmit}
-        className="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full text-black"
+        className="bg-white rounded-3xl shadow-2xl p-10 max-w-md w-full hover:shadow-3xl transition duration-300"
       >
-        <h2 className="text-2xl font-bold mb-6 text-gray-800">Driver Registration</h2>
+        <h2 className="text-3xl font-extrabold mb-5 text-center  text-green-900">
+          Driver Registration
+        </h2>
 
         {[
           { label: "Name", name: "name", type: "text" },
@@ -58,22 +58,22 @@ export default function DriverRegister() {
           { label: "Password", name: "password", type: "password" },
           { label: "Van Plate Number", name: "plateNumber", type: "text" },
         ].map((field) => (
-          <div className="mb-4" key={field.name}>
-            <label className="block mb-1 font-semibold ">{field.label}</label>
+          <div className="mb-5" key={field.name}>
+            <label className="block mb-2 font-semibold text-green-900">{field.label}</label>
             <input
               type={field.type}
               name={field.name}
               value={form[field.name]}
               onChange={handleChange}
               required
-              className="w-full border rounded px-3 py-2 text-black"
+              className="w-full p-3 border border-green-300 rounded-2xl focus:ring-2 focus:ring-green-400 outline-none transition duration-300 text-black"
             />
           </div>
         ))}
 
         <button
           type="submit"
-          className="w-full bg-green-500 text-white font-semibold py-2 rounded-xl hover:bg-green-600"
+          className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-4 rounded-2xl shadow-lg transition transform hover:scale-105 duration-300"
         >
           Register
         </button>

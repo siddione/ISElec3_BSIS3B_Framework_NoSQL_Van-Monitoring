@@ -11,7 +11,6 @@ export default function ReservationForm() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Get vanId from query params if user clicked "Reserve Seat" from Vans page
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const selectedVanId = params.get("vanId");
@@ -23,34 +22,26 @@ export default function ReservationForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!passengerName || !selectedVan) {
       alert("Please enter your name and ensure a van is selected");
       return;
     }
-
     if (quantity < 1 || quantity > selectedVan.availableSeats) {
       alert(`Please select between 1 and ${selectedVan.availableSeats} seats`);
       return;
     }
-
     try {
       const res = await fetch("http://localhost:3000/reservations", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ passengerName, vanId: selectedVan._id, quantity }),
       });
-
       const data = await res.json();
-
       if (!res.ok) {
         alert(data.error || "Reservation failed");
         return;
       }
-
-      fetchVans(); // refresh available seats
-
-      // Navigate to ticket page with reservation details
+      fetchVans();
       navigate("/ticket", {
         state: {
           ticket: {
@@ -72,8 +63,8 @@ export default function ReservationForm() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-green-100 to-green-50 p-6">
-      <div className="bg-white bg-opacity-90 rounded-2xl shadow-2xl p-10 max-w-lg w-full">
-        <h1 className="text-3xl font-extrabold mb-6 text-center text-green-900">
+      <div className="bg-white/90 rounded-3xl shadow-2xl p-12 max-w-lg w-full hover:shadow-3xl transition duration-300">
+        <h1 className="text-3xl md:text-4xl font-extrabold mb-6 text-center text-green-900">
           Reserve a Seat
         </h1>
 
@@ -93,12 +84,12 @@ export default function ReservationForm() {
                 value={passengerName}
                 onChange={(e) => setPassengerName(e.target.value)}
                 required
-                className="w-full p-3 border border-green-300 rounded-xl focus:ring-2 focus:ring-green-400 outline-none transition duration-300 text-black"
+                className="w-full p-4 border border-green-300 rounded-2xl focus:ring-4 focus:ring-green-400 outline-none transition duration-300 text-black"
               />
             </div>
 
-            <div className="bg-green-50 p-4 rounded-xl border border-green-300">
-              <h3 className="font-semibold text-green-900 mb-2">Selected Van</h3>
+            <div className="bg-green-50 p-5 rounded-2xl border border-green-200 shadow-sm">
+              <h3 className="font-semibold text-green-900 mb-3">Selected Van</h3>
               <div className="space-y-1 text-black">
                 <p><span className="font-semibold">Route:</span> {selectedVan.route}</p>
                 <p><span className="font-semibold">Driver:</span> {selectedVan.driverName}</p>
@@ -118,13 +109,13 @@ export default function ReservationForm() {
                 value={quantity}
                 onChange={(e) => setQuantity(parseInt(e.target.value) || 1)}
                 required
-                className="w-full p-3 border border-green-300 rounded-xl focus:ring-2 focus:ring-green-400 outline-none transition duration-300 text-black"
+                className="w-full p-4 border border-green-300 rounded-2xl focus:ring-4 focus:ring-green-400 outline-none transition duration-300 text-black"
               />
             </div>
 
             <button
               type="submit"
-              className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-xl shadow-lg transition transform hover:scale-105 duration-300"
+              className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-4 rounded-2xl shadow-lg transition transform hover:scale-105 duration-300"
             >
               Reserve
             </button>
