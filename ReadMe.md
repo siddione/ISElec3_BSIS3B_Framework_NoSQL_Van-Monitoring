@@ -101,3 +101,7 @@ Implemented error handling for:
 - Reservation Form
 - Logout & Token Handling
 - Delete Driver Account
+
+# PROJECT STATUS #
+Completed
+
