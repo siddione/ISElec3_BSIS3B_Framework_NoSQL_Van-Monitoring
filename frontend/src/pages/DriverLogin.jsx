@@ -15,7 +15,7 @@ export default function DriverLogin() {
   e.preventDefault();
   try {
     const res = await axios.post(
-      "http://localhost:3000/drivers/login",
+      `${API_URL}/drivers/login`,
       { email, password }
     );
 

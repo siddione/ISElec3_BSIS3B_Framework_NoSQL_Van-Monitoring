@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
-<<<<<<< HEAD
 import axios from "axios";
-=======
 import API_URL from "../config";
->>>>>>> fbf7806a30184e321de93c4135c087b563dc5c7a
 
 export default function Reservations() {
   const [reservations, setReservations] = useState([]);
@@ -14,7 +11,7 @@ export default function Reservations() {
 
   const fetchReservations = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/reservations");
+      const res = await axios.get(`${API_URL}/reservations`);
       setReservations(res.data);
       setLoading(false);
       setError("");
@@ -26,20 +23,7 @@ export default function Reservations() {
   };
 
   useEffect(() => {
-<<<<<<< HEAD
     fetchReservations();
-=======
-    fetch(`${API_URL}/reservations`)
-      .then((res) => res.json())
-      .then((data) => {
-        setReservations(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Error fetching reservations:", err);
-        setLoading(false);
-      });
->>>>>>> fbf7806a30184e321de93c4135c087b563dc5c7a
   }, []);
 
   const statusColors = {

@@ -24,7 +24,7 @@ export default function DriverRegister() {
   e.preventDefault();
   try {
     const res = await axios.post(
-      "http://localhost:3000/drivers/register",
+      `${API_URL}/drivers/register`,
       form
     );
 
@@ -32,7 +32,7 @@ export default function DriverRegister() {
 
     // Login immediately after registration
     const loginRes = await axios.post(
-      "http://localhost:3000/drivers/login",
+      `${API_URL}/drivers/login`,
       {
         email: form.email,
         password: form.password,

@@ -31,7 +31,7 @@ export default function DriverAuth() {
     setLoginError("");
 
     try {
-      const res = await fetch("http://localhost:3000/drivers/login", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || "https://iselec3-bsis3b-framework-nosql-van.onrender.com"}/drivers/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(loginData),
@@ -59,7 +59,7 @@ export default function DriverAuth() {
     setRegisterSuccess("");
 
     try {
-      const res = await fetch("http://localhost:3000/drivers/register", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || "https://iselec3-bsis3b-framework-nosql-van.onrender.com"}/drivers/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(registerData),
