@@ -8,6 +8,7 @@ const driverSchema = new mongoose.Schema({
   birthday: Date,
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
+  vanPlateNumber: { type: String },
   profilePic: {
     type: String,
     default: "https://via.placeholder.com/150",
