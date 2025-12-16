@@ -37,10 +37,10 @@ router.post("/register", async (req, res) => {
       birthday,
       email,
       password,
-      plateNumber,
+      vanPlateNumber,
     } = req.body;
 
-    if (!name || !licenseId || !email || !password || !plateNumber) {
+    if (!name || !licenseId || !email || !password || !vanPlateNumber) {
       return res.status(400).json({ error: "Required fields missing" });
     }
 
@@ -57,10 +57,11 @@ router.post("/register", async (req, res) => {
       birthday,
       email,
       password: hashedPassword,
+      vanPlateNumber,
     });
 
     const van = await Van.create({
-      plateNumber,
+      plateNumber: vanPlateNumber,
       driver: driver._id,
       status: "Waiting",
       availableSeats: 12,
