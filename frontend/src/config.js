@@ -1,4 +1,4 @@
-// API URL Configuration
+// API URL Configuration - Updated for Cloudflare Pages deployment
 const API_URL = import.meta.env.VITE_API_URL || 
                 (import.meta.env.PROD 
                   ? "https://iselec3-bsis3b-framework-nosql-van.onrender.com"
