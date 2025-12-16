@@ -9,10 +9,17 @@ const app = express();
 // ================= MIDDLEWARE =================
 app.use(express.json());
 app.use(cors({
-  origin: [
-    'http://localhost:5173',
-    'https://iselec3-bsis3b-framework-nosql-van-monitoring.pages.dev'
-  ],
+  origin: function(origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    // Allow all Cloudflare Pages deployments and localhost
+    if (origin.includes('.pages.dev') || origin.includes('localhost')) {
+      return callback(null, true);
+    }
+    
+    callback(new Error('Not allowed by CORS'));
+  },
   credentials: true
 }));
 app.use("/uploads", express.static("uploads"));
