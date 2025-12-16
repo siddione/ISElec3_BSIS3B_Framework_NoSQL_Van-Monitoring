@@ -14,7 +14,7 @@ export default function DriverAuth() {
   const [registerData, setRegisterData] = useState({
     name: "",
     licenseId: "",
-    plateNumber: "",
+    vanPlateNumber: "",
     address: "",
     age: "",
     birthday: "",
@@ -73,7 +73,7 @@ export default function DriverAuth() {
         setRegisterData({
           name: "",
           licenseId: "",
-          plateNumber: "",
+          vanPlateNumber: "",
           address: "",
           age: "",
           birthday: "",
@@ -183,9 +183,9 @@ export default function DriverAuth() {
             <input
               type="text"
               placeholder="Plate Number"
-              value={registerData.plateNumber}
+              value={registerData.vanPlateNumber}
               onChange={(e) =>
-                setRegisterData({ ...registerData, plateNumber: e.target.value })
+                setRegisterData({ ...registerData, vanPlateNumber: e.target.value })
               }
               required
               className="w-full p-3 rounded-xl border border-green-300 focus:outline-none focus:ring-2 focus:ring-green-500"

@@ -13,7 +13,7 @@ export default function DriverRegister() {
     birthday: "",
     email: "",
     password: "",
-    plateNumber: "",
+    vanPlateNumber: "",
   });
 
   const handleChange = (e) => {
@@ -66,7 +66,7 @@ export default function DriverRegister() {
           { label: "Birthday", name: "birthday", type: "date" },
           { label: "Email", name: "email", type: "email" },
           { label: "Password", name: "password", type: "password" },
-          { label: "Van Plate Number", name: "plateNumber", type: "text" },
+          { label: "Van Plate Number", name: "vanPlateNumber", type: "text" },
         ].map((field) => (
           <div className="mb-5" key={field.name}>
             <label className="block mb-2 font-semibold text-green-900">{field.label}</label>
